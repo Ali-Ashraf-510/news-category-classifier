@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Category Classifier</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar-header py-4 mb-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="mb-0 text-white">
+                        <i class="bi bi-newspaper me-2"></i>
+                        News Category Classifier
+                    </h1>
+                    <p class="mb-0 mt-2 text-white opacity-90">Classify news headlines using N-gram NLP model</p>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-light btn-sm shadow-sm" id="modelInfoBtn">
+                        <i class="bi bi-info-circle me-1"></i> Model Info
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mb-5">
+        <div class="row">
+            <!-- Input Section -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-pencil-square"></i>
+                            Enter News Headline
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Textarea -->
+                        <div class="mb-3">
+                            <label for="textInput" class="form-label">Headline Text:</label>
+                            <textarea 
+                                class="form-control" 
+                                id="textInput" 
+                                rows="6" 
+                                placeholder="Enter a news headline to classify...&#10;&#10;Example: 'Trump announces new economic policy for small businesses'"
+                                maxlength="5000"
+                            ></textarea>
+                            <div class="form-text">
+                                <span id="charCount">0</span> / 5000 characters
+                            </div>
+                        </div>
+
+                        <!-- Quick Examples -->
+                        <div class="mb-3">
+                            <label class="form-label">Quick Examples:</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-sm btn-outline-secondary example-btn" data-text="Trump announces new trade deal with European nations">Politics</button>
+                                <button class="btn btn-sm btn-outline-secondary example-btn" data-text="Top 10 meditation techniques for better mental health">Wellness</button>
+                                <button class="btn btn-sm btn-outline-secondary example-btn" data-text="New Marvel movie breaks box office records on opening weekend">Entertainment</button>
+                                <button class="btn btn-sm btn-outline-secondary example-btn" data-text="Hidden gems: Best budget-friendly destinations in Southeast Asia">Travel</button>
+                                <button class="btn btn-sm btn-outline-secondary example-btn" data-text="Spring fashion trends 2024: What to wear this season">Style & Beauty</button>
+                            </div>
+                        </div>
+
+                        <!-- Predict Button -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg" id="predictBtn">
+                                <i class="bi bi-magic"></i>
+                                Classify Headline
+                            </button>
+                            <button class="btn btn-outline-secondary" id="clearBtn">
+                                <i class="bi bi-x-circle"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            Prediction Results
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Initial State -->
+                        <div id="resultsEmpty" class="text-center text-muted py-5">
+                            <i class="bi bi-arrows-angle-contract" style="font-size: 3rem;"></i>
+                            <p class="mt-3">Enter a headline and click "Classify" to see results</p>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="resultsLoading" class="text-center py-5" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-3 text-muted">Analyzing headline...</p>
+                        </div>
+
+                        <!-- Error State -->
+                        <div id="resultsError" class="alert alert-danger" style="display: none;">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <strong>Error:</strong>
+                            <span id="errorMessage"></span>
+                        </div>
+
+                        <!-- Success State -->
+                        <div id="resultsSuccess" style="display: none;">
+                            <!-- Main Prediction -->
+                            <div class="result-card mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h4 class="mb-0">Predicted Category</h4>
+                                    <button class="btn btn-sm btn-outline-secondary" id="copyBtn" title="Copy result">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                </div>
+                                <div class="category-badge mb-3">
+                                    <h2 id="predictedLabel" class="mb-0"></h2>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Confidence:</small>
+                                    <strong id="confidenceText" class="ms-2"></strong>
+                                </div>
+                                <div class="progress" style="height: 25px;">
+                                    <div 
+                                        id="confidenceBar" 
+                                        class="progress-bar progress-bar-striped progress-bar-animated" 
+                                        role="progressbar" 
+                                        style="width: 0%"
+                                    >
+                                        <span id="confidencePercent"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- All Probabilities -->
+                            <div class="mb-4">
+                                <h6 class="mb-3">All Categories:</h6>
+                                <div id="allProbabilities"></div>
+                            </div>
+
+                            <!-- Preprocessing Preview Toggle -->
+                            <div>
+                                <button 
+                                    class="btn btn-sm btn-outline-info w-100" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#preprocessingPreview"
+                                >
+                                    <i class="bi bi-eye"></i>
+                                    Show Preprocessing Preview
+                                </button>
+                                <div class="collapse mt-3" id="preprocessingPreview">
+                                    <div class="card card-body bg-light">
+                                        <small class="text-muted mb-1">Preprocessed Text:</small>
+                                        <code id="preprocessedText" class="text-dark"></code>
+                                        <small class="text-muted mt-2">
+                                            <i class="bi bi-info-circle"></i>
+                                            Applied: lowercase → remove punctuation → remove stopwords
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Info -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="bi bi-tags-fill"></i>
+                            Supported Categories
+                        </h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-entertainment">ENTERTAINMENT</span>
+                            <span class="badge bg-politics">POLITICS</span>
+                            <span class="badge bg-style">STYLE & BEAUTY</span>
+                            <span class="badge bg-travel">TRAVEL</span>
+                            <span class="badge bg-wellness">WELLNESS</span>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            This model classifies news headlines into these 5 categories using TF-IDF vectorization and Multinomial Naive Bayes.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Model Info Modal -->
+    <div class="modal fade" id="modelInfoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-cpu"></i>
+                        Model Information
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modelInfoContent">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-3 mt-5">
+        <div class="container text-center text-muted">
+            <small>
+                <i class="bi bi-github"></i>
+                News Category Classifier | Built with Flask & Bootstrap 5
+            </small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

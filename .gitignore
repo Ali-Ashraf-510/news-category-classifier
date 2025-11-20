@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+venv/
+env/
+
+# Model files (Large - don't upload to GitHub)
+*.pkl
+*.joblib
+
+# Data files (Large)
+*.csv
+*.json
+!requirements.json
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log

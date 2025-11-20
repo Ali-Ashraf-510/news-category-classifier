@@ -1,0 +1,27 @@
+# Flask News Category Classifier
+# Requirements file for production deployment
+
+# Core Web Framework
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Machine Learning & NLP
+scikit-learn==1.3.2
+numpy==1.26.2
+scipy==1.11.4
+
+# NLP Preprocessing
+nltk==3.8.1
+
+# Model Serialization
+joblib==1.3.2
+
+# Optional: Development & Testing
+pytest==7.4.3
+pytest-flask==1.3.0
+
+# Optional: Production Server (uncomment for production)
+# gunicorn==21.2.0
+
+# Optional: CORS support (if needed for API)
+# flask-cors==4.0.0

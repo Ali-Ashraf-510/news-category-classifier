@@ -114,7 +114,7 @@ This project implements a **TF-IDF + Multinomial Naive Bayes** approach, ideal f
 
 ```bash
 # Clone the repository
-git clone https://github.com/<GITHUB_PROFILE>/news-category-classifier.git
+git clone https://github.com/Ali-Ashraf-510/news-category-classifier.git
 cd news-category-classifier
 
 # Create virtual environment
@@ -407,7 +407,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ```
 MIT License
 
-Copyright (c) 2025 <YOUR_NAME>
+Copyright (c) 2025 Ali Ashraf
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files...
@@ -417,15 +417,14 @@ of this software and associated documentation files...
 
 ## 📬 Contact
 
-**<YOUR_NAME>**  
+**Ali Ashraf**  
 Machine Learning Engineer | NLP Specialist
 
-- 📧 Email: <YOUR_EMAIL>
-- 💼 LinkedIn: [<LINKEDIN_URL>](https://linkedin.com/in/<LINKEDIN_URL>)
-- 🐱 GitHub: [@<GITHUB_PROFILE>](https://github.com/<GITHUB_PROFILE>)
-- 📁 Portfolio: <YOUR_PORTFOLIO_URL>
+- 📧 Email: aliabofooda1234@gmail.com
+- 💼 LinkedIn: [ali-ashraf-8b619b22a](https://linkedin.com/in/ali-ashraf-8b619b22a)
+- 🐱 GitHub: [@Ali-Ashraf-510](https://github.com/Ali-Ashraf-510)
 
-**Project Link:** [https://github.com/<GITHUB_PROFILE>/news-category-classifier](https://github.com/<GITHUB_PROFILE>/news-category-classifier)
+**Project Link:** [https://github.com/Ali-Ashraf-510/news-category-classifier](https://github.com/Ali-Ashraf-510/news-category-classifier)
 
 ---
 

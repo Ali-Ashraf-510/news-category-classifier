@@ -16,7 +16,7 @@ env/
 
 # Jupyter
 .ipynb_checkpoints
-*.ipynb
+notebooks/text_classification_using_N_grams.ipynb
 
 # IDE
 .vscode/

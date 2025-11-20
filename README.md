@@ -52,7 +52,6 @@ text classification using N-gram/
 ├── requirements.txt             # Python dependencies
 ├── static/                      # CSS & JS files
 ├── templates/                   # HTML pages
-├── tests/                       # Unit tests
 ├── data/                        # Dataset files
 ├── notebooks/                   # Jupyter notebooks
 ├── text_classification_model.pkl # Trained model
@@ -99,14 +98,6 @@ Content-Type: application/json
 ### Health Check
 ```bash
 GET /health
-```
-
----
-
-## 🧪 Testing
-
-```cmd
-pytest tests/test_app.py -v
 ```
 
 ---
